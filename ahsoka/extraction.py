@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A library of custom weighted profiles to fit to the NIRISS orders to complete
-the optimal extraction of the data.
+Extraction package from nirHiss by Adina Feinstein
 
-From nirhiss by Adina Feinstein
+Made self-contained for use in ahsoka
 
 """
+
+
+"""
+A library of custom weighted profiles
+to fit to the NIRISS orders to complete
+the optimal extraction of the data.
+Written by: Adina Feinstein
+Last updated: March 23, 2022
+"""
 import numpy as np
-import tqdm
-from tqdm import tqdm_notebook
+from tqdm import tqdm
 import scipy.optimize as so
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
@@ -17,7 +24,7 @@ from scipy.interpolate import interp1d
 
 import pyximport
 pyximport.install()
-import niriss_cython as profiles
+# from . import niriss_cython as profiles
 
 
 __all__ = ['box_extract', 'dirty_mask',

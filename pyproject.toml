@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ahsoka"
+version = "0.0.1"
+authors = [
+  { name="Douglas Long", email="dlong@stsci.edu" },
+]
+description = "A pipeline for JWST near-IR transiting exoplanet data"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "jupyter",
+  "bottleneck",
+  "tqdm",
+
+  # conditional
+  "jwst == 1.8.2; python_version < '3.11'",
+  "jwst == 1.10.2; python_version == '3.11'"
+
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Witchblade101/ahsoka"
+"Bug Tracker" = "https://github.com/Witchblade101/ahsoka/issues"

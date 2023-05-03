@@ -3,9 +3,14 @@
 *.asdf
 
 # Ignore this standard Mac directory
-*.DS_Store
+.DS_Store
 
 # Possible development detritus
 .vscode
 *.pyc
+build/
+dist/
+.cache
+.tmp
+
 

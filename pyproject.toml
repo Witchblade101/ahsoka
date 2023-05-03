@@ -21,6 +21,7 @@ dependencies = [
   "jupyter",
   "bottleneck",
   "tqdm",
+  "opencv-python",
 
   # conditional
   "jwst == 1.8.2; python_version < '3.11'",

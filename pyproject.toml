@@ -22,10 +22,11 @@ dependencies = [
   "bottleneck",
   "tqdm",
   "opencv-python",
+  "cython",
 
   # conditional
   "jwst == 1.8.2; python_version < '3.11'",
-  "jwst == 1.10.2; python_version == '3.11'"
+  "jwst == 1.10.2; python_version > '3.10'"
 
 ]
 

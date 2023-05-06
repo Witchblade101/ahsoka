@@ -12,7 +12,7 @@ import numpy as np
 from astropy.io import fits
 
 #from .background_utils import bkg_sub
-from masking import data_quality_mask
+from ahsoka.masking import data_quality_mask
 
 def create_F277W_bkg(filename, path=None, save=False, output_path=None,
                      output_filename='f277w_background.npy'):

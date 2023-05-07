@@ -14,6 +14,9 @@ from astropy.io import fits
 #from .background_utils import bkg_sub
 from ahsoka.masking import data_quality_mask
 
+# for debugging
+import matplotlib.pyplot as plt
+
 def create_F277W_bkg(filename, path=None, save=False, output_path=None,
                     output_filename='f277w_background.npy'):
    
@@ -48,26 +51,36 @@ def create_F277W_bkg(filename, path=None, save=False, output_path=None,
    if path is None:
       path = '.'
    path = path
+
    hdu = fits.open(os.path.join(path, filename))
    data = np.copy(hdu[1].data)            # pulls the data from the FITS file
    dq = data_quality_mask(hdu[2].data)    # creates bad DQ masks
    dq = np.nanmedian(dq, axis=0)
+
    median = np.nanmedian(data, axis=0)    # creates median integration
+
    # creates rough mask around the overlapping region
    mask = np.zeros(median.shape, dtype=bool)
    mask[:150, :600] = 1
    med_bkg = median*~mask
+   # try this, for now
+
    # masks everything that isn't a strong outlier (i.e. 0th order sources)
-   mask2 = med_bkg < np.nanmedian(med_bkg)*1.5
+   #mask2 = med_bkg < np.nanmedian(med_bkg)*1.5
+
    # Creates 2D background to remove extreneous background noise from the
    #   F277W frames
-   #b, _ = bkg_sub(3,2), (2,2), med_bkg, ~mask2)
+   #b2, _ = bkg_sub((3,2), (2,2), med_bkg, ~mask2)
    # The final background frame
    #bkg = (med_bkg-b2)*dq
-   bkg = med_bkg * dq
+   #bkg = med_bkg * dq
+   bkg = med_bkg
+
    if save:
       if output_path is None:
          output_path = '.'
-   np.save(os.path.join(output_path, output_filename), bkg)
+      np.save(os.path.join(output_path, output_filename), bkg)
+
    hdu.close()
+   
    return bkg

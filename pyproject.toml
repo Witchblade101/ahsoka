@@ -23,6 +23,7 @@ dependencies = [
   "tqdm",
   "opencv-python",
   "cython",
+  "astraeus,
 
   # conditional
   "jwst == 1.8.2; python_version < '3.11'",

@@ -1,14 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-
-NIRISS tracing routines from nirHiss by Adina Feinstein
-
-"""
-
 import os
 import numpy as np
-from numpy.polynomial import Polynomial
 import ccdproc as ccdp
 from astropy import units
 from astropy.io import fits

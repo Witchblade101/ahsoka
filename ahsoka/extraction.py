@@ -56,7 +56,9 @@ def box_extract(data, var, boxmask):
     all_spec = np.zeros((3, data.shape[0], data.shape[2]))
     all_var = np.zeros((3, data.shape[0], data.shape[2]))
 
-    for i in range(len(boxmask)):
+    for i in range(len(boxmask-1)): # modified for nirspec
+        print(len(boxmask-1))
+        print(i)
         all_spec[i] = np.nansum(data*boxmask[i], axis=1)
         all_var[i] = np.nansum(var*boxmask[i], axis=1)
 

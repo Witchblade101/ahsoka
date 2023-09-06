@@ -195,7 +195,10 @@ def badpixstep(datafiles, baseline_ints, smoothed_wlc=None, thresh=10,
 
         # If no lightcurve is provided, estimate it from the current data.
         if smoothed_wlc is None:
-            postage = cube[:, 20:60, 1500:1550]
+            if currentfile.meta.exposure.type == 'NIS_SOSS':
+                postage = cube[:, 20:60, 1500:1550] #SOSS
+            if currentfile.meta.exposure.type == 'NRS_BRIGHTOBJ':
+                postage = cube[:, 6:25, 15:483] #PRISM
             timeseries = np.nansum(postage, axis=(1, 2))
             timeseries = timeseries / np.nanmedian(timeseries[baseline_ints])
             if filter == 'CLEAR':
@@ -361,7 +364,7 @@ def open_filetype(datafile):
     if isinstance(datafile, str):
         data = datamodels.open(datafile)
     elif isinstance(datafile, (datamodels.CubeModel, datamodels.RampModel,
-                               datamodels.MultiSpecModel)):
+                               datamodels.MultiSpecModel, datamodels.SlitModel)):
         data = datafile
     else:
         raise ValueError('Invalid filetype: {}'.format(type(datafile)))

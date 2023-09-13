@@ -164,7 +164,10 @@ def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
     # If no lightcurve is provided, estimate it from the current data.
 
     if smoothed_wlc is None:
-        postage = cube[:, -1, 20:60, 1500:1550]
+        if currentfile.meta.exposure.type == 'NIS_SOSS':
+            postage = cube[:, -1, 20:60, 1500:1550] #SOSS
+        if currentfile.meta.exposure.type == 'NRS_BRIGHTOBJ':
+            postage = cube[:, 6:25, 15:483] #PRISM
         timeseries = np.nansum(postage, axis=(1, 2))
         timeseries = timeseries / np.nanmedian(timeseries[baseline_ints])
         if filter == 'CLEAR':
@@ -179,7 +182,7 @@ def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
     # trace and isolate 1/f noise. However, the background flux must also be
     # corrected for non-linearity. Therefore, it should be added back after
     # the 1/f is subtracted to be re-subtracted later.
-    if background is not None:
+    if background is not None: # Will always be None for PRISM? Or new npy file created by background functions?
         if isinstance(background, str):
             background = np.load(background)
 

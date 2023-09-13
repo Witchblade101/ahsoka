@@ -16,7 +16,7 @@ import warnings
 
 from jwst import datamodels
 
-class BackgroundStep:
+class SossClearBackgroundStep:
     """Wrapper around custom Background Subtraction step.
     """
 
@@ -71,7 +71,7 @@ class BackgroundStep:
 
         return results, background_models
     
-def backgroundstep(datafiles, background_model, output_dir='./',
+def sossclearbackgroundstep(datafiles, background_model, output_dir='./',
                    save_results=True, fileroots=None, fileroot_noseg='',
                    scale1=None, scale2=None):
     """Background subtraction must be carefully treated with SOSS observations.

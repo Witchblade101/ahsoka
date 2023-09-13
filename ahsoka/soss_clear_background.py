@@ -60,7 +60,7 @@ class SossClearBackgroundStep:
                     scale1 = kwargs['scale1']
                 if 'scale2' in kwargs.keys():
                     scale2 = kwargs['scale2']
-                step_results = backgroundstep(self.datafiles,
+                step_results = sossclearbackgroundstep(self.datafiles,
                                               self.background_model,
                                               output_dir=self.output_dir,
                                               save_results=save_results,

@@ -22,7 +22,7 @@ class BadPixStep:
     """
 
     def __init__(self, input_data, smoothed_wlc, baseline_ints,
-                 output_dir='./', occultation_type='transit', exposure_type='CLEAR'):
+                 output_dir='./', occultation_type='transit', filter='CLEAR'):
         """Step initializer.
         """
 
@@ -31,7 +31,7 @@ class BadPixStep:
         self.smoothed_wlc = smoothed_wlc
         self.baseline_ints = baseline_ints
         self.occultation_type = occultation_type
-        self.exposure_type = exposure_type
+        self.filter = filter
         self.datafiles = np.atleast_1d(input_data)
         self.fileroots = get_filename_root(self.datafiles)
         self.fileroot_noseg = get_filename_root_noseg(self.fileroots)
@@ -67,7 +67,7 @@ class BadPixStep:
                                       fileroots=self.fileroots,
                                       fileroot_noseg=self.fileroot_noseg,
                                       occultation_type=self.occultation_type,
-                                      exposure_type=self.exposure_type,
+                                      filter=self.filter,
                                       max_iter=max_iter, thresh=thresh,
                                       box_size=box_size)
             results, deepframe = step_results
@@ -76,7 +76,7 @@ class BadPixStep:
     
 def badpixstep(datafiles, baseline_ints, smoothed_wlc=None, thresh=10,
                box_size=5, max_iter=1, output_dir='./', save_results=True,
-               fileroots=None, fileroot_noseg='', occultation_type='transit', exposure_type='CLEAR'):
+               fileroots=None, fileroot_noseg='', occultation_type='transit', filter='CLEAR'):
     """Identify and correct hot pixels remaining in the dataset. Find outlier
     pixels in the median stack and correct them via the median of a box of
     surrounding pixels. Then replace these pixels in each integration via the
@@ -195,10 +195,13 @@ def badpixstep(datafiles, baseline_ints, smoothed_wlc=None, thresh=10,
 
         # If no lightcurve is provided, estimate it from the current data.
         if smoothed_wlc is None:
-            postage = cube[:, 20:60, 1500:1550]
+            if currentfile.meta.exposure.type == 'NIS_SOSS':
+                postage = cube[:, 20:60, 1500:1550] #SOSS
+            if currentfile.meta.exposure.type == 'NRS_BRIGHTOBJ':
+                postage = cube[:, 6:25, 15:483] #PRISM
             timeseries = np.nansum(postage, axis=(1, 2))
             timeseries = timeseries / np.nanmedian(timeseries[baseline_ints])
-            if exposure_type == 'CLEAR':
+            if filter == 'CLEAR':
                 # Smooth the time series on a timescale of roughly 2%.
                 smoothed_wlc = median_filter(timeseries,
                                          int(0.02*np.shape(cube)[0]))
@@ -361,7 +364,7 @@ def open_filetype(datafile):
     if isinstance(datafile, str):
         data = datamodels.open(datafile)
     elif isinstance(datafile, (datamodels.CubeModel, datamodels.RampModel,
-                               datamodels.MultiSpecModel)):
+                               datamodels.MultiSpecModel, datamodels.SlitModel)):
         data = datafile
     else:
         raise ValueError('Invalid filetype: {}'.format(type(datafile)))

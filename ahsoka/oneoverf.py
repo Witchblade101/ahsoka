@@ -26,7 +26,7 @@ class OneOverFStep:
 
     def __init__(self, input_data, baseline_ints, output_dir='./',
                  smoothed_wlc=None, outlier_maps=None, trace_mask=None,
-                 background=None, occultation_type='transit', exposure_type='CLEAR'):
+                 background=None, occultation_type='transit', filter='CLEAR'):
         """Step initializer.
         """
 
@@ -38,7 +38,7 @@ class OneOverFStep:
         self.outlier_maps = outlier_maps
         self.background = background
         self.occultation_type = occultation_type
-        self.exposure_type = exposure_type
+        self.filter = filter
         self.datafiles = np.atleast_1d(input_data)
         self.fileroots = get_filename_root(self.datafiles)
 
@@ -73,14 +73,14 @@ class OneOverFStep:
                                    trace_mask=self.trace_mask,
                                    fileroots=self.fileroots,
                                    occultation_type=self.occultation_type,
-                                   exposure_type=self.exposure_type)
+                                   filter=self.filter)
 
         return results
 
 def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
                  background=None, smoothed_wlc=None, output_dir='./',
                  save_results=True, outlier_maps=None, trace_mask=None,
-                 fileroots=None, occultation_type='transit', exposure_type='CLEAR'):
+                 fileroots=None, occultation_type='transit', filter='CLEAR'):
     """Custom 1/f correction routine to be applied at the group level. A
     median stack is constructed using all out-of-transit integrations and
     subtracted from each individual integration. The column-wise median of
@@ -164,10 +164,13 @@ def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
     # If no lightcurve is provided, estimate it from the current data.
 
     if smoothed_wlc is None:
-        postage = cube[:, -1, 20:60, 1500:1550]
+        if currentfile.meta.exposure.type == 'NIS_SOSS':
+            postage = cube[:, -1, 20:60, 1500:1550] #SOSS
+        if currentfile.meta.exposure.type == 'NRS_BRIGHTOBJ':
+            postage = cube[:, 6:25, 15:483] #PRISM
         timeseries = np.nansum(postage, axis=(1, 2))
         timeseries = timeseries / np.nanmedian(timeseries[baseline_ints])
-        if exposure_type == 'CLEAR':
+        if filter == 'CLEAR':
             # Smooth the time series on a timescale of roughly 2%.
             smoothed_wlc = median_filter(timeseries,
                                      int(0.02*np.shape(cube)[0]))
@@ -179,7 +182,7 @@ def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
     # trace and isolate 1/f noise. However, the background flux must also be
     # corrected for non-linearity. Therefore, it should be added back after
     # the 1/f is subtracted to be re-subtracted later.
-    if background is not None:
+    if background is not None: # Will always be None for PRISM? Or new npy file created by background functions? No - background ≠ background_model
         if isinstance(background, str):
             background = np.load(background)
 

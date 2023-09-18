@@ -182,7 +182,7 @@ def oneoverfstep(datafiles, baseline_ints, even_odd_rows=True,
     # trace and isolate 1/f noise. However, the background flux must also be
     # corrected for non-linearity. Therefore, it should be added back after
     # the 1/f is subtracted to be re-subtracted later.
-    if background is not None: # Will always be None for PRISM? Or new npy file created by background functions?
+    if background is not None: # Will always be None for PRISM? Or new npy file created by background functions? No - background ≠ background_model
         if isinstance(background, str):
             background = np.load(background)
 

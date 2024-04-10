@@ -1,6 +1,6 @@
 <img src="ahsoka_logo.png">
 
-# ahsoka
+# Ahsoka
 
 Developing a pipeline for JWST near-IR transiting exoplanet data
 

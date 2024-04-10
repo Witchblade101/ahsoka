@@ -1,6 +1,5 @@
 import os
 import numpy as np
-import ccdproc as ccdp
 from astropy import units
 from astropy.io import fits
 import matplotlib.pyplot as plt

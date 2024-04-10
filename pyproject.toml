@@ -26,8 +26,9 @@ dependencies = [
   #"astraeus @ git+https://github.com/kevin218/Astraeus",
 
   # conditional
-  "jwst == 1.8.2; python_version < '3.11'",
-  "jwst == 1.10.2; python_version > '3.10'"
+  #"jwst == 1.8.2; python_version < '3.11'",
+  #"jwst == 1.10.2; python_version > '3.10'"
+  "jwst"
 
 ]
 

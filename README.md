@@ -7,12 +7,20 @@ Developing a pipeline for JWST near-IR transiting exoplanet data
 
 ## Installation
 
-Clone the repository:  
-`git clone https://github.com/Witchblade101/ahsoka`  
+The latest version of Ahsoka can be installed directly with pip:
 
-Install ahsoka:  
-`cd ahsoka`  
-`pip install .`
+`pip install ahsoka`
 
-Install in Develop Mode
-`pip install -e .`
+To install a development version:
+
+    Clone the repository:  
+    `git clone https://github.com/Witchblade101/ahsoka`
+        or
+    `git@github.com:Witchblade101/ahsoka.git`
+
+    Install ahsoka:  
+    `cd ahsoka`  
+    `pip install .`
+
+    Install in Develop Mode
+    `pip install -e .`
